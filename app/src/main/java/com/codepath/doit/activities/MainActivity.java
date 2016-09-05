@@ -3,6 +3,7 @@ package com.codepath.doit.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.doit.R;
 import com.codepath.doit.adapter.CustomItemsAdapter;
 import com.codepath.doit.models.Item;
@@ -39,12 +42,25 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Item itemToBeDeleted = aToDoAdaptor.getItem(position);
-                items.remove(position);
-                Item.delete(Item.class, itemToBeDeleted.getId());
-                aToDoAdaptor.remove(itemToBeDeleted);
-                aToDoAdaptor.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                final int pos = position;
+                MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
+                        .title("Confirm delete")
+                        .content("Are you sure?")
+                        .positiveText("Yes")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Item itemToBeDeleted = aToDoAdaptor.getItem(pos);
+                                items.remove(pos);
+                                Item.delete(Item.class, itemToBeDeleted.getId());
+                                aToDoAdaptor.remove(itemToBeDeleted);
+                                aToDoAdaptor.notifyDataSetChanged();
+                                Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .negativeText("No")
+                        .show();
+
                 return false;
             }
         });

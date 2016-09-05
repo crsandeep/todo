@@ -22,6 +22,7 @@ android {
 repositories {
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    mavenCentral()
 }
 
 dependencies {
@@ -30,4 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'commons-io:commons-io:2.5'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+    compile 'com.afollestad.material-dialogs:commons:0.9.0.1'
 }
