@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DoIt</string>
+    <string name="add_button">Add</string>
+    <string name="save_button">Save</string>
+</resources>
