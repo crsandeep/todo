@@ -26,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.EditItemActivity"></activity>
+        <activity android:name=".activities.EditItemActivity" />
+        <activity android:name=".activities.NewItem"></activity>
     </application>
 
 </manifest>

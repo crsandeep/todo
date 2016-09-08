@@ -23,17 +23,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lvDisplay"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnAdd" />
+        android:layout_above="@+id/btnAdd"
+        android:layout_below="@+id/etSearch" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etAddText"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/btnAdd"
-        android:hint="Add a new item..." />
+        android:hint="Quickly add a new item..."
+        android:layout_toEndOf="@+id/spkBtn" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@android:drawable/ic_input_add"
+        android:onClick="onAddFull"
+        android:layout_alignBottom="@+id/lvDisplay"
+        android:layout_alignEnd="@+id/lvDisplay" />
+
+    <ImageButton
+        android:id="@+id/spkBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lvDisplay"
+        android:layout_margin="5dp"
+        android:layout_marginTop="27dp"
+        android:src="@android:drawable/ic_btn_speak_now"></ImageButton>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etSearch"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="Search task.."
+        android:inputType="textVisiblePassword" />
 
 </RelativeLayout>

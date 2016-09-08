@@ -1,12 +1,17 @@
 package com.codepath.doit.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -22,22 +27,25 @@ import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements OnClickListener {
 
     ArrayList<Item> items = new ArrayList<Item>();
     CustomItemsAdapter aToDoAdaptor;
     ListView listView;
     EditText editText;
+    EditText etSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.spkBtn).setOnClickListener(this);
         items = new ArrayList<Item>();
         populateItems();
         listView = (ListView) findViewById(R.id.lvDisplay);
         listView.setAdapter(aToDoAdaptor);
         editText = (EditText) findViewById(R.id.etAddText);
+        etSearch = (EditText) findViewById(R.id.etSearch);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -74,6 +82,28 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, 200);
             }
         });
+
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                MainActivity.this.aToDoAdaptor.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     private void populateItems() {
@@ -98,10 +128,33 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == 200 && requestCode == 200) {
             String editedText = data.getExtras().getString("editedText");
             int position = data.getExtras().getInt("position");
-            Item item = new Item(editedText);
+            Item item = items.get(position);
+            item.subject = editedText;
             items.set(position, item);
             aToDoAdaptor.notifyDataSetChanged();
             DBUtils.writeOne(item);
+        }
+        if (requestCode==201  && resultCode==RESULT_OK) {
+            ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            editText.append(thingsYouSaid.get(0));
+            editText.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+    }
+
+    public void onAddFull(View view) {
+        Intent i = new Intent(MainActivity.this, NewItem.class);
+        startActivity(i);
+    }
+
+    public void onClick(View view) {
+        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+        try {
+            startActivityForResult(i, 201);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
         }
     }
 }
