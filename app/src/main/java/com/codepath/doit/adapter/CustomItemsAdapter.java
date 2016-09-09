@@ -13,9 +13,6 @@ import com.codepath.doit.models.Item;
 
 import java.util.ArrayList;
 
-/**
- * Created by sraveesh on 9/5/16.
- */
 public class CustomItemsAdapter extends ArrayAdapter<Item> {
 
     private ArrayList<Item> items;
@@ -36,6 +33,16 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
         TextView tvName = (TextView) convertView.findViewById(R.id.tvItem);
         tvName.setText(item.subject);
         return convertView;
+    }
+
+    @Override
+    public void add(Item item) {
+        filteredItems.add(item);
+    }
+
+    @Override
+    public void remove(Item item) {
+        filteredItems.remove(item);
     }
 
     @Override
@@ -60,21 +67,22 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filteredItems = (ArrayList<Item>) results.values;
-                notifyDataSetChanged();
+                CustomItemsAdapter.this.notifyDataSetChanged();
             }
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<Item> filteredResults = new ArrayList<Item>();
+                ArrayList<Item> filteredResults = new ArrayList<>();
 
                 for(int i = 0; i < items.size(); i++) {
-                    if(items.get(i).subject.contains(constraint)) {
+                    if(items.get(i).subject.toLowerCase().contains(constraint.toString().toLowerCase())) {
                         filteredResults.add(items.get(i));
                     }
                 }
 
                 FilterResults results = new FilterResults();
                 results.values = filteredResults;
+                results.count = items.size();
 
                 return results;
             }

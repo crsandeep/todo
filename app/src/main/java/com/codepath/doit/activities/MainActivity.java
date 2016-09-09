@@ -1,18 +1,16 @@
 package com.codepath.doit.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,9 +25,9 @@ import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-    ArrayList<Item> items = new ArrayList<Item>();
+    ArrayList<Item> items = new ArrayList<>();
     CustomItemsAdapter aToDoAdaptor;
     ListView listView;
     EditText editText;
@@ -39,11 +37,10 @@ public class MainActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.spkBtn).setOnClickListener(this);
-        items = new ArrayList<Item>();
         populateItems();
         listView = (ListView) findViewById(R.id.lvDisplay);
         listView.setAdapter(aToDoAdaptor);
+        findViewById(R.id.spkBtn).setOnClickListener(this);
         editText = (EditText) findViewById(R.id.etAddText);
         etSearch = (EditText) findViewById(R.id.etSearch);
 
@@ -51,7 +48,7 @@ public class MainActivity extends Activity implements OnClickListener {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final int pos = position;
-                MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
+                new MaterialDialog.Builder(MainActivity.this)
                         .title("Confirm delete")
                         .content("Are you sure?")
                         .positiveText("Yes")
@@ -59,7 +56,6 @@ public class MainActivity extends Activity implements OnClickListener {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 Item itemToBeDeleted = aToDoAdaptor.getItem(pos);
-                                items.remove(pos);
                                 Item.delete(Item.class, itemToBeDeleted.getId());
                                 aToDoAdaptor.remove(itemToBeDeleted);
                                 aToDoAdaptor.notifyDataSetChanged();
@@ -69,7 +65,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         .negativeText("No")
                         .show();
 
-                return false;
+                return true;
             }
         });
 
@@ -77,7 +73,7 @@ public class MainActivity extends Activity implements OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                i.putExtra("text", items.get(position).subject);
+                i.putExtra("text", aToDoAdaptor.getItem(position).subject);
                 i.putExtra("position", position);
                 startActivityForResult(i, 200);
             }
@@ -102,11 +98,13 @@ public class MainActivity extends Activity implements OnClickListener {
             @Override
             public void afterTextChanged(Editable arg0) {
                 // TODO Auto-generated method stub
+                MainActivity.this.aToDoAdaptor.notifyDataSetChanged();
             }
         });
     }
 
     private void populateItems() {
+        items = new ArrayList<>();
         items = (ArrayList<Item>) DBUtils.readAll();
         aToDoAdaptor = new CustomItemsAdapter(this, items);
     }
@@ -116,9 +114,9 @@ public class MainActivity extends Activity implements OnClickListener {
         if(!TextUtils.isEmpty(newItem)) {
             Item item = new Item(newItem);
             aToDoAdaptor.add(item);
+            aToDoAdaptor.notifyDataSetChanged();
             editText.setText("");
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            listView.smoothScrollToPosition(listView.getCount() -1);
             DBUtils.writeOne(item);
         }
     }
@@ -128,9 +126,8 @@ public class MainActivity extends Activity implements OnClickListener {
         if (resultCode == 200 && requestCode == 200) {
             String editedText = data.getExtras().getString("editedText");
             int position = data.getExtras().getInt("position");
-            Item item = items.get(position);
+            Item item = aToDoAdaptor.getItem(position);
             item.subject = editedText;
-            items.set(position, item);
             aToDoAdaptor.notifyDataSetChanged();
             DBUtils.writeOne(item);
         }
