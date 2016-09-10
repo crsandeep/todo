@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     ListView listView;
     EditText editText;
     EditText etSearch;
+    ImageView imgTick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         listView = (ListView) findViewById(R.id.lvDisplay);
         listView.setAdapter(aToDoAdaptor);
         findViewById(R.id.spkBtn).setOnClickListener(this);
+        imgTick = (ImageView)findViewById(R.id.imgTick);
         editText = (EditText) findViewById(R.id.etAddText);
         etSearch = (EditText) findViewById(R.id.etSearch);
 
@@ -101,6 +106,30 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 MainActivity.this.aToDoAdaptor.notifyDataSetChanged();
             }
         });
+
+
+        editText.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                listView.smoothScrollToPosition(listView.getCount() -1);
+                if(!TextUtils.isEmpty(cs.toString().trim())) {
+                    imgTick.setVisibility(View.VISIBLE);
+                } else {
+                    imgTick.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+        });
     }
 
     private void populateItems() {
@@ -109,16 +138,32 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         aToDoAdaptor = new CustomItemsAdapter(this, items);
     }
 
-    public void onAddNewItem(View view) {
-        String newItem = editText.getText().toString().trim();
-        if(!TextUtils.isEmpty(newItem)) {
-            Item item = new Item(newItem);
-            aToDoAdaptor.add(item);
-            aToDoAdaptor.notifyDataSetChanged();
-            editText.setText("");
-            listView.smoothScrollToPosition(listView.getCount() -1);
-            DBUtils.writeOne(item);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return id == R.id.action_settings;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onShareClick(MenuItem view) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "";
+        for(int i = 0; i < items.size(); i++) {
+            shareBody += i+1 + ". " + items.get(i).subject + "\n";
+        }
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "ToDo tasks");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     @Override
@@ -152,6 +197,18 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onTickClick(View view) {
+        String newItem = editText.getText().toString().trim();
+        if(!TextUtils.isEmpty(newItem)) {
+            Item item = new Item(newItem);
+            aToDoAdaptor.add(item);
+            aToDoAdaptor.notifyDataSetChanged();
+            editText.setText("");
+            listView.smoothScrollToPosition(listView.getCount() -1);
+            DBUtils.writeOne(item);
         }
     }
 }

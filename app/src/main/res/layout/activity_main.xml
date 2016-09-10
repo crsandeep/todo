@@ -18,32 +18,22 @@
         android:id="@+id/etSearch"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:hint="Search task.."
+        android:hint="@string/search_hint"
         android:inputType="textVisiblePassword" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lvDisplay"
-        android:layout_above="@+id/btnAdd"
-        android:layout_below="@+id/etSearch" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button"
-        android:id="@+id/btnAdd"
-        android:onClick="onAddNewItem"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/etSearch"
+        android:layout_above="@+id/imgTick" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etAddText"
         android:layout_alignParentBottom="true"
-        android:hint="Quickly add a new item..."
+        android:hint="@string/quick_add_hint"
         android:layout_toEndOf="@+id/spkBtn" />
 
     <android.support.design.widget.FloatingActionButton
@@ -56,9 +46,9 @@
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         android:onClick="onAddFull"
-        android:layout_marginBottom="30dp"
-        android:layout_alignBottom="@+id/lvDisplay"
-        android:layout_alignStart="@+id/btnAdd" />
+        android:layout_marginBottom="36dp"
+        android:layout_above="@+id/imgTick"
+        android:layout_alignStart="@+id/imgTick" />
 
     <ImageButton
         android:id="@+id/spkBtn"
@@ -66,7 +56,22 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lvDisplay"
         android:backgroundTint="@android:color/white"
-        android:tint="@android:color/black"
+        android:tint="@color/colorPrimary"
+        android:contentDescription="@string/mic_image"
         android:src="@android:drawable/ic_btn_speak_now" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgTick"
+        android:clickable="true"
+        android:visibility="invisible"
+        android:onClick="onTickClick"
+        android:src="@drawable/tick"
+        android:contentDescription="@string/click_image"
+        android:layout_alignBottom="@+id/etAddText"
+        android:layout_alignEnd="@+id/lvDisplay"
+        android:layout_alignTop="@+id/etAddText"
+        android:layout_toEndOf="@+id/etAddText" />
 
 </RelativeLayout>

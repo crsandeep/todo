@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" Edit Item Below"
+        android:text="@string/edit_item_text"
         android:id="@+id/tvEditItem"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
