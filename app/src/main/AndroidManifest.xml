@@ -29,7 +29,7 @@
         <activity android:name=".activities.EditItemActivity" />
         <activity android:name=".activities.NewItem" />
 
-        <receiver android:name="values.ToDoWidget">
+        <receiver android:name="values.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -38,6 +38,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/to_do_widget_info" />
         </receiver>
+        <service android:name="values.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>
