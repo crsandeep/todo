@@ -11,21 +11,25 @@ import com.codepath.doit.R;
 import com.codepath.doit.models.Item;
 import com.codepath.doit.utils.DBUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private static List<Item> items;
+    private List<Item> items;
     private Context ctxt=null;
     private int appWidgetId;
 
     public WidgetViewsFactory(Context ctxt, Intent intent) {
+        System.out.println("WidgetViewsFactory........................................");
         this.ctxt=ctxt;
         appWidgetId=intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         populate();
     }
 
-    private static void populate() {
+    private void populate() {
+        items = new ArrayList<>();
+        System.out.println("Updating the items........................................");
         items = DBUtils.readAll();
     }
 

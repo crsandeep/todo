@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     ImageView imgTick;
     ImageView spkBtn;
     FloatingActionButton fab;
+    int ids[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
