@@ -20,7 +20,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     private int appWidgetId;
 
     public WidgetViewsFactory(Context ctxt, Intent intent) {
-        System.out.println("WidgetViewsFactory........................................");
         this.ctxt=ctxt;
         appWidgetId=intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -29,7 +28,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     private void populate() {
         items = new ArrayList<>();
-        System.out.println("Updating the items........................................");
         items = DBUtils.readAll();
     }
 

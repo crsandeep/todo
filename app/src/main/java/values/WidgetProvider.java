@@ -17,9 +17,7 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
-        System.out.println("onUpdate........................................");
         for (int i=0; i<appWidgetIds.length; i++) {
-            System.out.println("for loop........................................" + appWidgetIds[i]);
             Intent svcIntent = new Intent(ctxt, WidgetService.class);
 
             svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
