@@ -28,14 +28,6 @@
         android:layout_below="@+id/etSearch"
         android:layout_above="@+id/imgTick" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/etAddText"
-        android:layout_alignParentBottom="true"
-        android:hint="@string/quick_add_hint"
-        android:layout_toEndOf="@+id/spkBtn" />
-
     <android.support.design.widget.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab"
@@ -46,7 +38,7 @@
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         android:onClick="onAddFull"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="5dp"
         android:layout_above="@+id/imgTick"
         android:layout_alignStart="@+id/imgTick" />
 
@@ -59,6 +51,14 @@
         android:tint="@color/colorPrimary"
         android:contentDescription="@string/mic_image"
         android:src="@android:drawable/ic_btn_speak_now" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etAddText"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/quick_add_hint"
+        android:layout_toEndOf="@+id/spkBtn" />
 
     <ImageView
         android:layout_width="wrap_content"

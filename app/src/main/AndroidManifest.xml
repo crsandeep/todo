@@ -27,7 +27,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.EditItemActivity" />
-        <activity android:name=".activities.NewItem"></activity>
+        <activity android:name=".activities.NewItem" />
+
+        <receiver android:name="values.ToDoWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/to_do_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

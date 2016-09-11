@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     EditText editText;
     EditText etSearch;
     ImageView imgTick;
+    ImageView spkBtn;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         listView.setAdapter(aToDoAdaptor);
         findViewById(R.id.spkBtn).setOnClickListener(this);
         imgTick = (ImageView)findViewById(R.id.imgTick);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        spkBtn = (ImageView) findViewById(R.id.spkBtn);
         editText = (EditText) findViewById(R.id.etAddText);
         etSearch = (EditText) findViewById(R.id.etSearch);
 
@@ -90,6 +95,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
+                if(!TextUtils.isEmpty(cs.toString().trim())) {
+                    editText.setText("");
+                    fab.setVisibility(View.INVISIBLE);
+                    spkBtn.setVisibility(View.INVISIBLE);
+                    editText.setVisibility(View.INVISIBLE);
+                } else {
+                    fab.setVisibility(View.VISIBLE);
+                    spkBtn.setVisibility(View.VISIBLE);
+                    editText.setVisibility(View.VISIBLE);
+                }
                 MainActivity.this.aToDoAdaptor.getFilter().filter(cs);
             }
 
@@ -113,8 +128,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 listView.smoothScrollToPosition(listView.getCount() -1);
                 if(!TextUtils.isEmpty(cs.toString().trim())) {
+                    fab.setVisibility(View.INVISIBLE);
                     imgTick.setVisibility(View.VISIBLE);
                 } else {
+                    fab.setVisibility(View.VISIBLE);
                     imgTick.setVisibility(View.INVISIBLE);
                 }
             }
@@ -132,8 +149,17 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if(etSearch.getText().toString().trim().length() > 0){
+            etSearch.setText("");
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
     private void populateItems() {
-        items = new ArrayList<>();
         items = (ArrayList<Item>) DBUtils.readAll();
         aToDoAdaptor = new CustomItemsAdapter(this, items);
     }
