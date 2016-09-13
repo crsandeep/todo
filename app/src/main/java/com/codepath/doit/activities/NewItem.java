@@ -3,11 +3,13 @@ package com.codepath.doit.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.codepath.doit.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -34,8 +36,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
 //    }
 
 
-    private TextView timeTextView;
-    private TextView dateTextView;
+    private EditText timeTextView;
+    private EditText dateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
         spinner.setSelection(1);
 
         // Find our View instances
-        timeTextView = (TextView)findViewById(R.id.tvDisplayTime);
-        dateTextView = (TextView)findViewById(R.id.tvDisplayDate);
+        timeTextView = (EditText)findViewById(R.id.etDisplayTime);
+        dateTextView = (EditText)findViewById(R.id.etDisplayDate);
         ImageView timeButton = (ImageView)findViewById(R.id.imgTime);
         ImageView dateButton = (ImageView)findViewById(R.id.imgDate);
 
@@ -93,6 +95,13 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_new, menu);
+        return true;
+    }
+
+    @Override
     public void onClick(View view) {
 
     }
@@ -111,8 +120,7 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
         String minuteString = minute < 10 ? "0"+minute : ""+minute;
-        String secondString = second < 10 ? "0"+second : ""+second;
-        String time = hourString+"h "+minuteString+"m";
+        String time = hourString+":"+minuteString;
         timeTextView.setText(time);
     }
 
@@ -128,5 +136,9 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
 
     public void clearTime(View view) {
         timeTextView.setText("Time not set");
+    }
+
+    public void onAddNewSaveClick(MenuItem item) {
+
     }
 }
