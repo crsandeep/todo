@@ -1,6 +1,7 @@
 package com.codepath.doit.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,19 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
         }
         TextView tvName = (TextView) convertView.findViewById(R.id.tvItem);
+        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvItemPriority);
         tvName.setText(item.subject);
+        tvPriority.setText(item.priority);
+        TextView dueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
+        if(!TextUtils.isEmpty(item.dueDate)) {
+            dueDate.setVisibility(View.VISIBLE);
+            dueDate.setText("due on " + item.dueDate);
+            if(!TextUtils.isEmpty(item.dueTime)) {
+                dueDate.append(" " + item.dueTime);
+            }
+        } else {
+            dueDate.setVisibility(View.GONE);
+        }
         return convertView;
     }
 

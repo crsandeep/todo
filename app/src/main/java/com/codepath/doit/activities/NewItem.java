@@ -1,21 +1,31 @@
 package com.codepath.doit.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.codepath.doit.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class NewItem extends AppCompatActivity implements View.OnClickListener,
@@ -35,29 +45,59 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
 //        spinner.setSelection(1);
 //    }
 
+    private EditText etNewTask;
 
     private EditText timeTextView;
     private EditText dateTextView;
+    private Spinner spinner;
+
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.priority_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setSelection(1);
 
         // Find our View instances
+        etNewTask = (EditText)findViewById(R.id.etNewTask);
         timeTextView = (EditText)findViewById(R.id.etDisplayTime);
         dateTextView = (EditText)findViewById(R.id.etDisplayDate);
         ImageView timeButton = (ImageView)findViewById(R.id.imgTime);
         ImageView dateButton = (ImageView)findViewById(R.id.imgDate);
 
+        String subject = getIntent().getStringExtra("subject");
+        position = getIntent().getIntExtra("position", -1);
+        String priority = getIntent().getStringExtra("priority");
+        String date = getIntent().getStringExtra("date");
+        String time = getIntent().getStringExtra("time");
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        if(!TextUtils.isEmpty(subject)) {
+            etNewTask.append(subject);
+        }
+        if(!TextUtils.isEmpty(priority)) {
+            if(priority.equals("Low")) {
+                spinner.setSelection(0);
+            } else if(priority.equals("Medium")) {
+                spinner.setSelection(1);
+            } else if(priority.equals("High")) {
+                spinner.setSelection(2);
+            }
+        }
+        if(!TextUtils.isEmpty(date)) {
+            dateTextView.setText(date);
+        }
+        if(!TextUtils.isEmpty(time)) {
+            timeTextView.setText(time);
+        }
 
         // Show a timepicker when the timeButton is clicked
         timeButton.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +110,6 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
                         now.get(Calendar.MINUTE),
                         false
                 );
-                tpd.setTitle("TimePicker Title");
-                tpd.setAccentColor(Color.parseColor("#9C27B0"));
                 tpd.show(getFragmentManager(), "Timepickerdialog");
             }
         });
@@ -87,8 +125,6 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
                         now.get(Calendar.MONTH),
                         now.get(Calendar.DAY_OF_MONTH)
                 );
-                dpd.setAccentColor(Color.parseColor("#9C27B0"));
-                dpd.setTitle("DatePicker Title");
                 dpd.show(getFragmentManager(), "Datepickerdialog");
             }
         });
@@ -98,6 +134,17 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_new, menu);
+        Drawable drawable = menu.findItem(R.id.newadd).getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
+
+        Drawable drawable1 = menu.findItem(R.id.shareNew).getIcon();
+        if (drawable1 != null) {
+            drawable1.mutate();
+            drawable1.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
         return true;
     }
 
@@ -131,14 +178,88 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
     }
 
     public void clearDate(View view) {
-        dateTextView.setText("Date not set");
+        dateTextView.setText("");
     }
 
     public void clearTime(View view) {
-        timeTextView.setText("Time not set");
+        timeTextView.setText("");
     }
 
     public void onAddNewSaveClick(MenuItem item) {
+        if(TextUtils.isEmpty(etNewTask.getText().toString().trim())) {
+            Toast.makeText(NewItem.this, "Task cannot be empty", Toast.LENGTH_SHORT).show();
+        } else {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(etNewTask.getWindowToken(), 0);
+            Intent data = new Intent();
+            data.putExtra("subject", etNewTask.getText().toString());
+            data.putExtra("position", position);
+            data.putExtra("date", dateTextView.getText().toString());
+            data.putExtra("time", timeTextView.getText().toString());
+            data.putExtra("priority", spinner.getSelectedItem().toString());
+            setResult(200, data);
+            this.finish();
+        }
+    }
 
+    public void onDateSet(View view) {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                NewItem.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    public void onTimeSet(View view) {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                NewItem.this,
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                false
+        );
+        tpd.show(getFragmentManager(), "Timepickerdialog");
+    }
+
+    public void onSpkBtnClick(View view) {
+        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+        try {
+            startActivityForResult(i, 201);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 201 && resultCode == RESULT_OK) {
+            ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            etNewTask.append(thingsYouSaid.get(0));
+            etNewTask.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+    }
+
+    public void onShareClick(MenuItem view) {
+        if(!TextUtils.isEmpty(etNewTask.getText().toString())) {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "";
+            shareBody += etNewTask.getText().toString();
+            if(!TextUtils.isEmpty(dateTextView.getText().toString())) {
+                shareBody += " by " + dateTextView.getText().toString();
+                if(!TextUtils.isEmpty(timeTextView.getText().toString())) {
+                    shareBody += " " + timeTextView.getText().toString();
+                }
+            }
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "ToDo task");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+        }
     }
 }

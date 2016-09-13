@@ -83,10 +83,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                i.putExtra("text", aToDoAdaptor.getItem(position).subject);
-                i.putExtra("position", position);
-                startActivityForResult(i, 200);
+                etSearch.setText("");
+            Intent i = new Intent(MainActivity.this, NewItem.class);
+            i.putExtra("subject", aToDoAdaptor.getItem(position).subject);
+            i.putExtra("priority", aToDoAdaptor.getItem(position).priority);
+            i.putExtra("date", aToDoAdaptor.getItem(position).dueDate);
+            i.putExtra("time", aToDoAdaptor.getItem(position).dueTime);
+            i.putExtra("position", position);
+            startActivityForResult(i, 202);
             }
         });
 
@@ -186,7 +190,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         sharingIntent.setType("text/plain");
         String shareBody = "";
         for(int i = 0; i < items.size(); i++) {
-            shareBody += i+1 + ". " + items.get(i).subject + "\n";
+            shareBody += i+1 + ". " + items.get(i).subject;
+            if(!TextUtils.isEmpty(items.get(i).dueDate)) {
+                shareBody += " by " + items.get(i).dueDate;
+                if(!TextUtils.isEmpty(items.get(i).dueTime)) {
+                    shareBody += " " + items.get(i).dueTime;
+                }
+            }
+            shareBody += "\n";
         }
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "ToDo tasks");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
@@ -209,11 +220,34 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             editText.requestFocus();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
+        if (requestCode==202  && resultCode==200) {
+            Item newItem;
+            int position = data.getExtras().getInt("position");
+            if(position >= 0) {
+                newItem = aToDoAdaptor.getItem(position);
+            } else {
+                newItem = new Item();
+            }
+            newItem.subject = data.getExtras().getString("subject");
+            if(!TextUtils.isEmpty(data.getExtras().getString("date"))) {
+                newItem.dueDate = data.getExtras().getString("date");
+            }
+            if(!TextUtils.isEmpty(data.getExtras().getString("time"))) {
+                newItem.dueTime = data.getExtras().getString("time");
+            }
+            newItem.priority = data.getExtras().getString("priority");
+            if(position == -1) {
+                aToDoAdaptor.add(newItem);
+            }
+            aToDoAdaptor.notifyDataSetChanged();
+            DBUtils.writeOne(newItem);
+        }
     }
 
     public void onAddFull(View view) {
+        etSearch.setText("");
         Intent i = new Intent(MainActivity.this, NewItem.class);
-        startActivity(i);
+        startActivityForResult(i, 202);
     }
 
     public void onClick(View view) {
@@ -231,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         String newItem = editText.getText().toString().trim();
         if(!TextUtils.isEmpty(newItem)) {
             Item item = new Item(newItem);
+            item.priority = "Low";
             aToDoAdaptor.add(item);
             aToDoAdaptor.notifyDataSetChanged();
             editText.setText("");

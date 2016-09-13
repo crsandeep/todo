@@ -19,6 +19,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:hint="@string/search_hint"
+        android:textColorHint="#B8BFC2"
         android:inputType="textVisiblePassword" />
 
     <ListView
@@ -57,6 +58,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/etAddText"
         android:layout_alignParentBottom="true"
+        android:textColorHint="#B8BFC2"
         android:hint="@string/quick_add_hint"
         android:layout_toEndOf="@+id/spkBtn" />
 

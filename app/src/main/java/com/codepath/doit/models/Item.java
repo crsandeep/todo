@@ -9,6 +9,15 @@ public class Item extends Model {
     @Column(name = "Subject")
     public String subject;
 
+    @Column(name = "DueDate")
+    public String dueDate;
+
+    @Column(name = "DueTime")
+    public String dueTime;
+
+    @Column(name = "Priority")
+    public String priority;
+
     // Make sure to have a default constructor for every ActiveAndroid model
     @SuppressWarnings("unused")
     public Item(){

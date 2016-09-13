@@ -1,11 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.codepath.doit.activities.MainActivity" >
+    tools:context="com.codepath.doit.activities.NewItem" >
     <item android:id="@+id/newadd"
         android:title="Save"
         android:onClick="onAddNewSaveClick"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_done_black_24dp"
+        android:orderInCategory="98"
+        android:icon="@drawable/ic_done_black_30dp"
+        app:showAsAction="always" />
+    <item android:id="@+id/shareNew"
+        android:title="Share"
+        android:onClick="onShareClick"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:orderInCategory="99"
         app:showAsAction="always" />
 </menu>
