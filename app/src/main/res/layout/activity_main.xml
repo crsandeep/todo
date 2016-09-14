@@ -12,21 +12,11 @@
     tools:context=".activities.MainActivity"
     android:background="@android:color/white">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etSearch"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:hint="@string/search_hint"
-        android:textColorHint="#B8BFC2"
-        android:inputType="textVisiblePassword" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:id="@+id/lvDisplay"
-        android:layout_below="@+id/etSearch"
         android:layout_above="@+id/imgTick" />
 
     <android.support.design.widget.FloatingActionButton

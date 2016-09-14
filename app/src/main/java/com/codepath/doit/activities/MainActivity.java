@@ -1,11 +1,15 @@
 package com.codepath.doit.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,17 +33,15 @@ import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
+public class MainActivity extends AppCompatActivity implements OnClickListener, SearchView.OnQueryTextListener {
 
     ArrayList<Item> items = new ArrayList<>();
     CustomItemsAdapter aToDoAdaptor;
     ListView listView;
     EditText editText;
-    EditText etSearch;
     ImageView imgTick;
     ImageView spkBtn;
     FloatingActionButton fab;
-    int ids[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         spkBtn = (ImageView) findViewById(R.id.spkBtn);
         editText = (EditText) findViewById(R.id.etAddText);
-        etSearch = (EditText) findViewById(R.id.etSearch);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -83,50 +84,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etSearch.setText("");
-            Intent i = new Intent(MainActivity.this, NewItem.class);
-            i.putExtra("subject", aToDoAdaptor.getItem(position).subject);
-            i.putExtra("priority", aToDoAdaptor.getItem(position).priority);
-            i.putExtra("date", aToDoAdaptor.getItem(position).dueDate);
-            i.putExtra("time", aToDoAdaptor.getItem(position).dueTime);
-            i.putExtra("position", position);
-            startActivityForResult(i, 202);
+                Intent i = new Intent(MainActivity.this, NewItem.class);
+                i.putExtra("subject", aToDoAdaptor.getItem(position).subject);
+                i.putExtra("priority", aToDoAdaptor.getItem(position).priority);
+                i.putExtra("date", aToDoAdaptor.getItem(position).dueDate);
+                i.putExtra("time", aToDoAdaptor.getItem(position).dueTime);
+                i.putExtra("position", position);
+                startActivityForResult(i, 202);
             }
         });
-
-
-        etSearch.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // When user changed the Text
-                if(!TextUtils.isEmpty(cs.toString().trim())) {
-                    editText.setText("");
-                    fab.setVisibility(View.INVISIBLE);
-                    spkBtn.setVisibility(View.INVISIBLE);
-                    editText.setVisibility(View.INVISIBLE);
-                } else {
-                    fab.setVisibility(View.VISIBLE);
-                    spkBtn.setVisibility(View.VISIBLE);
-                    editText.setVisibility(View.VISIBLE);
-                }
-                MainActivity.this.aToDoAdaptor.getFilter().filter(cs);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-                MainActivity.this.aToDoAdaptor.notifyDataSetChanged();
-            }
-        });
-
 
         editText.addTextChangedListener(new TextWatcher(){
             @Override
@@ -152,16 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             }
         });
-    }
 
-    @Override
-    public void onBackPressed() {
-        if(etSearch.getText().toString().trim().length() > 0){
-            etSearch.setText("");
-        }
-        else {
-            super.onBackPressed();
-        }
     }
 
     private void populateItems() {
@@ -173,6 +130,32 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        Drawable drawable = menu.findItem(R.id.search).getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setTint(Color.WHITE);
+        }
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                fab.setVisibility(View.INVISIBLE);
+                spkBtn.setVisibility(View.INVISIBLE);
+                editText.setVisibility(View.INVISIBLE);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                fab.setVisibility(View.VISIBLE);
+                spkBtn.setVisibility(View.VISIBLE);
+                editText.setVisibility(View.VISIBLE);
+                return true;
+            }
+        });
         return true;
     }
 
@@ -224,17 +207,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             Item newItem;
             int position = data.getExtras().getInt("position");
             if(position >= 0) {
+                System.out.println("MainActivity position " + position);
                 newItem = aToDoAdaptor.getItem(position);
             } else {
                 newItem = new Item();
             }
             newItem.subject = data.getExtras().getString("subject");
-            if(!TextUtils.isEmpty(data.getExtras().getString("date"))) {
-                newItem.dueDate = data.getExtras().getString("date");
-            }
-            if(!TextUtils.isEmpty(data.getExtras().getString("time"))) {
-                newItem.dueTime = data.getExtras().getString("time");
-            }
+            newItem.dueDate = data.getExtras().getString("date");
+            newItem.dueTime = data.getExtras().getString("time");
             newItem.priority = data.getExtras().getString("priority");
             if(position == -1) {
                 aToDoAdaptor.add(newItem);
@@ -245,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
 
     public void onAddFull(View view) {
-        etSearch.setText("");
         Intent i = new Intent(MainActivity.this, NewItem.class);
         startActivityForResult(i, 202);
     }
@@ -272,5 +251,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             listView.smoothScrollToPosition(listView.getCount() -1);
             DBUtils.writeOne(item);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        MainActivity.this.aToDoAdaptor.getFilter().filter(newText);
+        return true;
     }
 }

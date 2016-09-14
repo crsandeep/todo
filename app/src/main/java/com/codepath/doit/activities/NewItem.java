@@ -193,6 +193,7 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
             imm.hideSoftInputFromWindow(etNewTask.getWindowToken(), 0);
             Intent data = new Intent();
             data.putExtra("subject", etNewTask.getText().toString());
+            System.out.println("NewActivity position " + position);
             data.putExtra("position", position);
             data.putExtra("date", dateTextView.getText().toString());
             data.putExtra("time", timeTextView.getText().toString());

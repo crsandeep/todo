@@ -50,16 +50,21 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
 
     @Override
     public void add(Item item) {
-        filteredItems.add(item);
+        //this.items.add(item);
+        this.filteredItems.add(item);
     }
 
     @Override
     public void remove(Item item) {
-        filteredItems.remove(item);
+        //this.items.remove(item);
+        this.filteredItems.remove(item);
     }
 
     @Override
     public Item getItem(int position) {
+        System.out.println("items " + items.size());
+        System.out.println("filteredItems" + filteredItems.size());
+        System.out.println("position " + position);
         return filteredItems.get(position);
     }
 
