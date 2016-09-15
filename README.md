@@ -34,7 +34,7 @@ The following **additional** features are implemented:
 
 ## Video Walkthrough 
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories (I will soon upload a video with add/edit todo tasks via voice from my phone, I was unable to get Genymotion working with audio input):
 
 <img src='todoApp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
@@ -45,6 +45,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 Describe any challenges encountered while building the app.
 
 * Adding search functionality for listView with Custom Adapter was harder
+* Problem with audio input in Genymotion
 * Setting up ActiveAndroid took a while
 
 ## License
