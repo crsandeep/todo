@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text100"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:padding="6dip"
-    android:textStyle="bold|italic"
-    />
+    android:layout_height="match_parent"
+    android:background="#252525"
+    android:id="@+id/widgetItem"
+    android:padding="10dp"
+    >
+
+    <TextView
+        android:id="@+id/textSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dip"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif"
+        android:text="Item" />
+
+    <TextView
+        android:id="@+id/textDueDate"
+        android:layout_below="@+id/textSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dip"
+        android:textColor="@android:color/holo_blue_light"
+        android:fontFamily="sans-serif"
+        android:textStyle="italic"
+        android:text="Item" />
+</RelativeLayout>

@@ -263,4 +263,4 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         MainActivity.this.aToDoAdaptor.getFilter().filter(newText);
         return true;
     }
-}
+ }

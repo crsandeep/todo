@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/to_do_widget"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWidgetHeader"
+        android:text="DoIt"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_alignParentTop="true"/>
+    <ListView
+        android:id="@+id/to_do_widget"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/tvWidgetHeader"
+        android:layout_height="match_parent" />
+</RelativeLayout>

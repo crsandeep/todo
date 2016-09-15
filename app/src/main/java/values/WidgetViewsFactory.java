@@ -3,9 +3,8 @@ package values;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.TypedValue;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -53,19 +52,16 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         RemoteViews row=new RemoteViews(ctxt.getPackageName(),
                 R.layout.row);
 
-        row.setTextViewText(R.id.text100, items.get(position).subject);
-        row.setTextViewTextSize(R.id.text100, TypedValue.COMPLEX_UNIT_DIP, 18);
-        row.setTextColor(R.id.text100, Color.WHITE);
-        row.setInt(R.id.text100, "setBackgroundColor",
-                android.graphics.Color.BLACK);
+        row.setTextViewText(R.id.textSubject, items.get(position).subject);
 
+        if(!TextUtils.isEmpty(items.get(position).dueDate)) {
+            row.setViewVisibility(R.id.textDueDate, View.VISIBLE);
+            row.setTextViewText(R.id.textDueDate, items.get(position).dueDate);
+        } else {
+            row.setViewVisibility(R.id.textDueDate, View.GONE);
+        }
         Intent i=new Intent();
-        Bundle extras=new Bundle();
-
-        extras.putString(WidgetProvider.EXTRA_WORD, items.get(position).subject);
-        i.putExtras(extras);
-        row.setOnClickFillInIntent(R.id.text100, i);
-
+        row.setOnClickFillInIntent(R.id.widgetItem, i);
         return(row);
     }
 
