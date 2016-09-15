@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
@@ -10,22 +11,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dip"
-        android:textSize="18dip"
+        android:textSize="18sp"
         android:fontFamily="sans-serif"
-        android:textColor="@android:color/black"
-        android:text="Item" />
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/tvItemPriority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dip"
-        android:textSize="16dip"
+        android:textSize="16sp"
         android:fontFamily="sans-serif"
         android:textColor="@color/colorPrimary"
-        android:text="Item"
         android:layout_alignTop="@+id/tvItem"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/tvDueDate"
@@ -33,9 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="2dip"
-        android:textSize="12dip"
+        android:textSize="12sp"
         android:fontFamily="sans-serif"
         android:textColor="#808080"
-        android:textStyle="italic"
-        android:text="Item" />
+        android:textStyle="italic" />
 </RelativeLayout>

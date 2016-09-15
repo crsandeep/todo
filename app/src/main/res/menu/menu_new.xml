@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.doit.activities.NewItem" >
     <item android:id="@+id/newadd"
-        android:title="Save"
+        android:title="@string/save_item"
         android:onClick="onAddNewSaveClick"
         android:orderInCategory="98"
         android:icon="@drawable/ic_done_black_30dp"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/shareNew"
-        android:title="Share"
+        android:title="@string/share_item"
         android:onClick="onShareClick"
         android:icon="@drawable/ic_share_black_24dp"
         android:orderInCategory="99"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

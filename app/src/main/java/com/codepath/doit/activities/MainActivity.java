@@ -162,10 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return id == R.id.action_settings;
-        }
-        return super.onOptionsItemSelected(item);
+        return (id == R.id.action_settings) || super.onOptionsItemSelected(item);
     }
 
     public void onShareClick(MenuItem view) {

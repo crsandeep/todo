@@ -1,6 +1,5 @@
 package values;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -18,12 +17,9 @@ import java.util.List;
 public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<Item> items;
     private Context ctxt=null;
-    private int appWidgetId;
 
-    public WidgetViewsFactory(Context ctxt, Intent intent) {
+    public WidgetViewsFactory(Context ctxt) {
         this.ctxt=ctxt;
-        appWidgetId=intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
         populate();
     }
 

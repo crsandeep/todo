@@ -38,7 +38,7 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
         TextView dueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
         if(!TextUtils.isEmpty(item.dueDate)) {
             dueDate.setVisibility(View.VISIBLE);
-            dueDate.setText("due on " + item.dueDate);
+            dueDate.setText(item.dueDate);
             if(!TextUtils.isEmpty(item.dueTime)) {
                 dueDate.append(" " + item.dueTime);
             }

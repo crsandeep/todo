@@ -84,12 +84,16 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
             etNewTask.append(subject);
         }
         if(!TextUtils.isEmpty(priority)) {
-            if(priority.equals("Low")) {
-                spinner.setSelection(0);
-            } else if(priority.equals("Medium")) {
-                spinner.setSelection(1);
-            } else if(priority.equals("High")) {
-                spinner.setSelection(2);
+            switch (priority) {
+                case "Low":
+                    spinner.setSelection(0);
+                    break;
+                case "Medium":
+                    spinner.setSelection(1);
+                    break;
+                case "High":
+                    spinner.setSelection(2);
+                    break;
             }
         }
         if(!TextUtils.isEmpty(date)) {

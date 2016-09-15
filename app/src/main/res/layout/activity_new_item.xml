@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Task to be done"
+        android:text="@string/task_to_be_done"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textSize="15sp"
@@ -29,7 +29,7 @@
         android:id="@+id/etNewTask"
         android:layout_below="@+id/tvNewTask"
         android:layout_alignParentStart="true"
-        android:hint="Enter task here.." />
+        android:hint="@string/enter_task_here" />
 
     <ImageButton
         android:id="@+id/spkBtnNewTask"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
-        android:text="Due date"
+        android:text="@string/due_date"
         android:textSize="15sp"
         android:id="@+id/tvDate"
         android:layout_marginTop="30dp"
@@ -59,7 +59,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/etDisplayDate"
-        android:hint="Date not set"
+        android:hint="@string/date_not_set"
         android:onClick="onDateSet"
         android:focusable="false"
         android:focusableInTouchMode="false"
@@ -68,7 +68,8 @@
         android:textSize="20sp"
         android:paddingTop="8sp"
         android:layout_below="@+id/tvDate"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        tools:ignore="TextFields" />
 
     <ImageView
         android:layout_width="36dp"
@@ -77,18 +78,20 @@
         android:id="@+id/imgDate"
         android:tint="@color/colorPrimary"
         android:layout_below="@+id/tvDate"
-        android:layout_toEndOf="@+id/etDisplayDate"/>
+        android:layout_toEndOf="@+id/etDisplayDate"
+        android:contentDescription="@string/click_to_set_date" />
 
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:src="@drawable/ic_highlight_off_black_24dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:tint="@color/colorPrimary"
         android:id="@+id/imgDateClear"
         android:layout_below="@+id/tvDate"
         android:layout_toEndOf="@+id/imgDate"
-        android:onClick="clearDate" />
+        android:onClick="clearDate"
+        android:contentDescription="@string/cancel_date" />
 
     <EditText
         android:layout_width="250dp"
@@ -96,7 +99,7 @@
         android:id="@+id/etDisplayTime"
         android:layout_marginTop="20dp"
         android:onClick="onTimeSet"
-        android:hint="Time not set"
+        android:hint="@string/time_not_set"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:cursorVisible="false"
@@ -114,26 +117,28 @@
         android:src="@drawable/ic_schedule_black_24dp"
         android:id="@+id/imgTime"
         android:layout_below="@+id/etDisplayDate"
-        android:layout_toEndOf="@+id/etDisplayTime" />
+        android:layout_toEndOf="@+id/etDisplayTime"
+        android:contentDescription="@string/click_to_set_time" />
 
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:src="@drawable/ic_highlight_off_black_24dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:tint="@color/colorPrimary"
         android:id="@+id/imgTimeClear"
         android:layout_below="@+id/etDisplayDate"
         android:layout_toEndOf="@+id/imgTime"
-        android:onClick="clearTime" />
+        android:onClick="clearTime"
+        android:contentDescription="@string/cancel_time"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
-        android:text="Enter priority"
+        android:text="@string/enter_priority"
         android:textSize="15sp"
         android:layout_marginTop="30dp"
         android:id="@+id/tvPriority"
