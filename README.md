@@ -40,6 +40,8 @@ Here's a walkthrough of implemented user stories (I will soon upload a video wit
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
+Video demonstrating the add and edit task via voice https://youtu.be/qrSPlJoinHY
+
 ## Notes
 
 Describe any challenges encountered while building the app.
