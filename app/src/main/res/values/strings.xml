@@ -6,7 +6,7 @@
     <string name="share_menu">Share</string>
     <string name="edit_item_text"> Edit Item Below</string>
     <string name="search_hint">Search task</string>
-    <string name="quick_add_hint">Quickly add a new item.......</string>
+    <string name="quick_add_hint">Quickly add a new item</string>
     <string name="mic_image">Talk to add task</string>
     <string name="click_image">Click to add task</string>
     <string-array name="priority_array">
@@ -29,4 +29,5 @@
     <string name="search_task">Search task</string>
     <string name="save_item">Save</string>
     <string name="share_item">Share</string>
+    <string name="delete_items">delete items</string>
 </resources>

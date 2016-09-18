@@ -6,68 +6,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.codepath.doit.R;
+import com.codepath.doit.activities.MainActivity;
 import com.codepath.doit.models.Item;
 
 import java.util.ArrayList;
 
-public class CustomItemsAdapter extends ArrayAdapter<Item> {
+public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable {
 
-    private ArrayList<Item> items;
-    private ArrayList<Item> filteredItems;
+    private ArrayList<Item> original;
+    private ArrayList<Item> fitems;
+    private Filter filter;
+    private Context context;
 
     public CustomItemsAdapter(Context context, ArrayList<Item> items) {
         super(context, 0, items);
-        this.items = items;
-        this.filteredItems = items;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Item item = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
-        }
-        TextView tvName = (TextView) convertView.findViewById(R.id.tvItem);
-        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvItemPriority);
-        tvName.setText(item.subject);
-        tvPriority.setText(item.priority);
-        TextView dueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
-        if(!TextUtils.isEmpty(item.dueDate)) {
-            dueDate.setVisibility(View.VISIBLE);
-            dueDate.setText(item.dueDate);
-            if(!TextUtils.isEmpty(item.dueTime)) {
-                dueDate.append(" " + item.dueTime);
-            }
-        } else {
-            dueDate.setVisibility(View.GONE);
-        }
-        return convertView;
+        this.original = new ArrayList<>();
+        this.original.addAll(items);
+        this.fitems = new ArrayList<>();
+        this.fitems.addAll(items);
+        this.context = context;
     }
 
     @Override
     public void add(Item item) {
-        //this.items.add(item);
-        this.filteredItems.add(item);
+        this.fitems.add(item);
+        this.original.add(item);
+        notifyDataSetChanged();
     }
 
     @Override
     public void remove(Item item) {
-        //this.items.remove(item);
-        this.filteredItems.remove(item);
-    }
-
-    @Override
-    public Item getItem(int position) {
-        return filteredItems.get(position);
+        this.fitems.remove(item);
+        this.original.remove(item);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return filteredItems.size();
+        return fitems.size();
+    }
+
+    @Override
+    public Item getItem(int position) {
+        return fitems.get(position);
     }
 
     @Override
@@ -76,31 +63,82 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> {
     }
 
     @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredItems = (ArrayList<Item>) results.values;
-                CustomItemsAdapter.this.notifyDataSetChanged();
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater vi = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = vi.inflate(R.layout.item, null);
+        Item item = fitems.get(position);
+        if (item != null) {
+            TextView tvName = (TextView) v.findViewById(R.id.tvItem);
+            TextView tvPriority = (TextView) v.findViewById(R.id.tvItemPriority);
+            CheckBox cb = (CheckBox) v.findViewById(R.id.cbItemCheck);
+            cb.setOnCheckedChangeListener((MainActivity) context);
+            tvName.setText(item.subject);
+            tvPriority.setText(item.priority);
+            TextView dueDate = (TextView) v.findViewById(R.id.tvDueDate);
+            if (!TextUtils.isEmpty(item.dueDate)) {
+                dueDate.setVisibility(View.VISIBLE);
+                dueDate.setText(item.dueDate);
+                if (!TextUtils.isEmpty(item.dueTime)) {
+                    dueDate.append(" " + item.dueTime);
+                }
+            } else {
+                dueDate.setVisibility(View.GONE);
             }
+        }
+        return v;
+    }
 
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<Item> filteredResults = new ArrayList<>();
+    @Override
+    public Filter getFilter()
+    {
+        if (filter == null) {
+            filter = new ItemsFilter();
+        }
+        return filter;
+    }
 
-                for(int i = 0; i < items.size(); i++) {
-                    if(items.get(i).subject.toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        filteredResults.add(items.get(i));
+    private class ItemsFilter extends Filter
+    {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint)
+        {
+            FilterResults results = new FilterResults();
+            String prefix = constraint.toString().toLowerCase();
+
+            if (prefix.length() == 0)
+            {
+                ArrayList<Item> list = new ArrayList<>(original);
+                results.values = list;
+                results.count = list.size();
+            }
+            else
+            {
+                final ArrayList<Item> list = new ArrayList<>(original);
+                final ArrayList<Item> nlist = new ArrayList<>();
+                int count = list.size();
+
+                for (int i=0; i<count; i++)
+                {
+                    final Item item = list.get(i);
+                    final String value = item.subject.toLowerCase();
+
+                    if (value.contains(prefix))
+                    {
+                        nlist.add(item);
                     }
                 }
-
-                FilterResults results = new FilterResults();
-                results.values = filteredResults;
-                results.count = items.size();
-
-                return results;
+                results.values = nlist;
+                results.count = nlist.size();
             }
-        };
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            fitems = (ArrayList<Item>)results.values;
+            CustomItemsAdapter.this.notifyDataSetChanged();
+        }
+
     }
 }

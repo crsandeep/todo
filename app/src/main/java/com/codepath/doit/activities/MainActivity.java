@@ -13,12 +13,14 @@ import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,7 +35,7 @@ import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener, SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity implements OnClickListener, SearchView.OnQueryTextListener, CompoundButton.OnCheckedChangeListener {
 
     ArrayList<Item> items = new ArrayList<>();
     CustomItemsAdapter aToDoAdaptor;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
     ImageView imgTick;
     ImageView spkBtn;
     FloatingActionButton fab;
+    MenuItem deleteItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
                                 Item itemToBeDeleted = aToDoAdaptor.getItem(pos);
                                 Item.delete(Item.class, itemToBeDeleted.getId());
                                 aToDoAdaptor.remove(itemToBeDeleted);
-                                aToDoAdaptor.notifyDataSetChanged();
                                 Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -118,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
 
             }
         });
-
     }
 
     private void populateItems() {
@@ -135,9 +136,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             drawable.mutate();
             drawable.setTint(Color.WHITE);
         }
+        Drawable drawableDelete = menu.findItem(R.id.deleteItems).getIcon();
+        if (drawableDelete != null) {
+            drawableDelete.mutate();
+            drawableDelete.setTint(Color.WHITE);
+        }
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.findViewById(android.support.v7.appcompat.R.id.search_plate).setBackgroundColor(Color.WHITE);
+        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(Color.BLACK);
         searchView.setOnQueryTextListener(this);
+
+        deleteItems = menu.findItem(R.id.deleteItems);
+        deleteItems.setVisible(false);
 
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -186,14 +198,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 200 && requestCode == 200) {
-            String editedText = data.getExtras().getString("editedText");
-            int position = data.getExtras().getInt("position");
-            Item item = aToDoAdaptor.getItem(position);
-            item.subject = editedText;
-            aToDoAdaptor.notifyDataSetChanged();
-            DBUtils.writeOne(item);
-        }
         if (requestCode==201  && resultCode==RESULT_OK) {
             ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             editText.append(thingsYouSaid.get(0));
@@ -214,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             newItem.dueTime = data.getExtras().getString("time");
             newItem.priority = data.getExtras().getString("priority");
             if(position == -1) {
+                Log.w("MyApp", "position 0");
                 aToDoAdaptor.add(newItem);
             }
             aToDoAdaptor.notifyDataSetChanged();
@@ -243,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             Item item = new Item(newItem);
             item.priority = "Low";
             aToDoAdaptor.add(item);
-            aToDoAdaptor.notifyDataSetChanged();
             editText.setText("");
             listView.smoothScrollToPosition(listView.getCount() -1);
             DBUtils.writeOne(item);
@@ -260,4 +264,38 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         MainActivity.this.aToDoAdaptor.getFilter().filter(newText);
         return true;
     }
- }
+
+    ArrayList<Item> deleteList = new ArrayList<>();
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Log.w("MyApp", "onCheckedChanged");
+        int pos = listView.getPositionForView(buttonView);
+        Item tempItem = aToDoAdaptor.getItem(pos);
+        if(isChecked) {
+            if(!deleteList.contains(tempItem)) {
+                deleteList.add(tempItem);
+            }
+        } else {
+            if(deleteList.contains(tempItem)) {
+                deleteList.remove(tempItem);
+            }
+        }
+        if(isChecked || deleteList.size() > 0) {
+            deleteItems.setVisible(true);
+        }
+        if(deleteList.size() == 0){
+            deleteItems.setVisible(false);
+        }
+    }
+
+    public void deleteItems(MenuItem item) {
+        Log.w("MyApp", "deleteItems");
+        for(Item temp: deleteList) {
+            Item.delete(Item.class, temp.getId());
+            aToDoAdaptor.remove(temp);
+        }
+        deleteList.clear();
+        deleteItems.setVisible(false);
+    }
+}

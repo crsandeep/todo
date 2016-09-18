@@ -6,6 +6,14 @@
     android:padding="10dp"
     >
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbItemCheck"
+        android:paddingEnd="20dp"
+        android:focusable="false"
+        android:layout_alignParentStart="true"/>
+
     <TextView
         android:id="@+id/tvItem"
         android:layout_width="wrap_content"
@@ -13,6 +21,9 @@
         android:padding="4dip"
         android:textSize="18sp"
         android:fontFamily="sans-serif"
+        android:layout_alignTop="@+id/cbItemCheck"
+        android:layout_alignBottom="@+id/cbItemCheck"
+        android:layout_toEndOf="@+id/cbItemCheck"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -30,6 +41,7 @@
     <TextView
         android:id="@+id/tvDueDate"
         android:layout_below="@+id/tvItem"
+        android:layout_toEndOf="@+id/cbItemCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="2dip"
