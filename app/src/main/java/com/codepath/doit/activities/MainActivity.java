@@ -1,5 +1,7 @@
 package com.codepath.doit.activities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -35,6 +37,8 @@ import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
 
+import values.WidgetProvider;
+
 public class MainActivity extends AppCompatActivity implements OnClickListener, SearchView.OnQueryTextListener, CompoundButton.OnCheckedChangeListener {
 
     ArrayList<Item> items = new ArrayList<>();
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
     ImageView spkBtn;
     FloatingActionButton fab;
     MenuItem deleteItems;
+    MenuItem searchItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
                                 Item itemToBeDeleted = aToDoAdaptor.getItem(pos);
                                 Item.delete(Item.class, itemToBeDeleted.getId());
                                 aToDoAdaptor.remove(itemToBeDeleted);
+                                items.remove(itemToBeDeleted);
                                 Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -141,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             drawableDelete.mutate();
             drawableDelete.setTint(Color.WHITE);
         }
-        MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.findViewById(android.support.v7.appcompat.R.id.search_plate).setBackgroundColor(Color.WHITE);
         EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
@@ -154,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                Log.w("MyApp", "onMenuItemActionExpand");
                 fab.setVisibility(View.INVISIBLE);
                 spkBtn.setVisibility(View.INVISIBLE);
                 editText.setVisibility(View.INVISIBLE);
@@ -162,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                Log.w("MyApp", "onMenuItemActionCollapse");
                 fab.setVisibility(View.VISIBLE);
                 spkBtn.setVisibility(View.VISIBLE);
                 editText.setVisibility(View.VISIBLE);
@@ -220,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             if(position == -1) {
                 Log.w("MyApp", "position 0");
                 aToDoAdaptor.add(newItem);
+                items.add(newItem);
             }
             aToDoAdaptor.notifyDataSetChanged();
             DBUtils.writeOne(newItem);
@@ -251,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             editText.setText("");
             listView.smoothScrollToPosition(listView.getCount() -1);
             DBUtils.writeOne(item);
+            items.add(item);
         }
     }
 
@@ -261,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        Log.w("MyApp", "onQueryTextChange");
         MainActivity.this.aToDoAdaptor.getFilter().filter(newText);
         return true;
     }
@@ -282,9 +293,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             }
         }
         if(isChecked || deleteList.size() > 0) {
+            Log.w("MyApp", "search disable");
+            searchItem.setVisible(false);
             deleteItems.setVisible(true);
         }
         if(deleteList.size() == 0){
+            Log.w("MyApp", "search enable");
+            searchItem.setVisible(true);
             deleteItems.setVisible(false);
         }
     }
@@ -294,8 +309,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         for(Item temp: deleteList) {
             Item.delete(Item.class, temp.getId());
             aToDoAdaptor.remove(temp);
+            items.remove(temp);
         }
         deleteList.clear();
         deleteItems.setVisible(false);
+        searchItem.setVisible(true);
+        updateWidgets();
+    }
+
+    private void updateWidgets() {
+        int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
+        AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(widgetIDs, R.id.to_do_widget);
     }
 }
