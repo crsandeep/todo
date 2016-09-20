@@ -49,6 +49,7 @@ Here's a walkthrough of implemented user stories (I will soon upload a video wit
 
 
 <img src='todoNew.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Video demonstrating the add and edit task via voice https://youtu.be/qrSPlJoinHY
