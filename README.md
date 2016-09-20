@@ -26,6 +26,7 @@ The following **additional** features are implemented:
 
 * [x] Search feature on the menubar to search for the todo items
 * [x] Add or edit todo items via voice
+* [x] Multiple tasks delete
 * [x] Resizable widget displays the todo items and the due date in the home screen
 * [x] Integration with sharing on Android. Share the todo items via whatsapp, facebook, twitter, gmail, hangouts, slack, facebook, messenger and many other apps
 * [x] Quick task bar to add some todo item quickly
