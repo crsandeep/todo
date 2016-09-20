@@ -37,16 +37,7 @@ The following **additional** features are implemented:
 
 ### Version 1
 
-Here's a walkthrough of implemented user stories (I will soon upload a video with add/edit todo tasks via voice from my phone, I was unable to get Genymotion working with audio input):
-
-<img src='todoApp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-
-
-### Version 2 with multiple delete feature
-
-
-
+Here's a walkthrough of implemented user stories
 
 <img src='todoNew.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
