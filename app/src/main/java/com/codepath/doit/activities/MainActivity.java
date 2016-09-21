@@ -33,9 +33,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.codepath.doit.R;
 import com.codepath.doit.adapter.CustomItemsAdapter;
 import com.codepath.doit.models.Item;
+import com.codepath.doit.models.Priority;
 import com.codepath.doit.utils.DBUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import values.WidgetProvider;
 
@@ -130,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
 
     private void populateItems() {
         items = (ArrayList<Item>) DBUtils.readAll();
+        Collections.sort(items);
         aToDoAdaptor = new CustomItemsAdapter(this, items);
     }
 
@@ -224,12 +227,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             newItem.subject = data.getExtras().getString("subject");
             newItem.dueDate = data.getExtras().getString("date");
             newItem.dueTime = data.getExtras().getString("time");
-            newItem.priority = data.getExtras().getString("priority");
+            newItem.priority = (Priority) data.getSerializableExtra("Priority");
             if(position == -1) {
                 Log.w("MyApp", "position 0");
                 aToDoAdaptor.add(newItem);
                 items.add(newItem);
             }
+            Collections.sort(items);
             aToDoAdaptor.notifyDataSetChanged();
             DBUtils.writeOne(newItem);
         }
@@ -255,12 +259,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         String newItem = editText.getText().toString().trim();
         if(!TextUtils.isEmpty(newItem)) {
             Item item = new Item(newItem);
-            item.priority = "Low";
+            item.priority = Priority.LOW;
             aToDoAdaptor.add(item);
             editText.setText("");
             listView.smoothScrollToPosition(listView.getCount() -1);
+            Collections.sort(items);
             DBUtils.writeOne(item);
             items.add(item);
+            Collections.sort(items);
         }
     }
 
@@ -310,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
             Item.delete(Item.class, temp.getId());
             aToDoAdaptor.remove(temp);
             items.remove(temp);
+            Collections.sort(items);
         }
         deleteList.clear();
         deleteItems.setVisible(false);

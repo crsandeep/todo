@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codepath.doit.R;
+import com.codepath.doit.models.Priority;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -43,13 +44,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
-
         spinner = (Spinner) findViewById(R.id.spinner);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.priority_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Priority.values()));
 
         // Find our View instances
         etNewTask = (EditText)findViewById(R.id.etNewTask);
@@ -187,7 +183,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
             data.putExtra("position", position);
             data.putExtra("date", dateTextView.getText().toString());
             data.putExtra("time", timeTextView.getText().toString());
-            data.putExtra("priority", spinner.getSelectedItem().toString());
+            Priority p = (Priority) spinner.getSelectedItem();
+            data.putExtra("Priority", p);
             setResult(200, data);
             this.finish();
         }

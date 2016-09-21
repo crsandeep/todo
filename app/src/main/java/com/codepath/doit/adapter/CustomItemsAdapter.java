@@ -16,6 +16,7 @@ import com.codepath.doit.activities.MainActivity;
 import com.codepath.doit.models.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable {
 
@@ -36,14 +37,18 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable
     @Override
     public void add(Item item) {
         this.fitems.add(item);
+        Collections.sort(this.fitems);
         this.original.add(item);
+        Collections.sort(this.original);
         notifyDataSetChanged();
     }
 
     @Override
     public void remove(Item item) {
         this.fitems.remove(item);
+        Collections.sort(this.fitems);
         this.original.remove(item);
+        Collections.sort(this.original);
         notifyDataSetChanged();
     }
 
@@ -73,7 +78,7 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable
             CheckBox cb = (CheckBox) v.findViewById(R.id.cbItemCheck);
             cb.setOnCheckedChangeListener((MainActivity) context);
             tvName.setText(item.subject);
-            tvPriority.setText(item.priority);
+            tvPriority.setText(item.priority.getName());
             TextView dueDate = (TextView) v.findViewById(R.id.tvDueDate);
             if (!TextUtils.isEmpty(item.dueDate)) {
                 dueDate.setVisibility(View.VISIBLE);
