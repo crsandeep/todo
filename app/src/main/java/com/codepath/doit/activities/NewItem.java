@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +23,14 @@ import android.widget.Toast;
 
 import com.codepath.doit.R;
 import com.codepath.doit.models.Priority;
+import com.codepath.doit.utils.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewItem extends AppCompatActivity implements View.OnClickListener,
         TimePickerDialog.OnTimeSetListener,
@@ -56,8 +59,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
 
         String subject = getIntent().getStringExtra("subject");
         position = getIntent().getIntExtra("position", -1);
-        String priority = getIntent().getStringExtra("priority");
-        String date = getIntent().getStringExtra("date");
+        Priority priority = (Priority) getIntent().getSerializableExtra("priority");
+        Date date = (Date) getIntent().getSerializableExtra("date");
         String time = getIntent().getStringExtra("time");
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -65,21 +68,17 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
         if(!TextUtils.isEmpty(subject)) {
             etNewTask.append(subject);
         }
-        if(!TextUtils.isEmpty(priority)) {
-            switch (priority) {
-                case "Low":
-                    spinner.setSelection(0);
-                    break;
-                case "Medium":
-                    spinner.setSelection(1);
-                    break;
-                case "High":
-                    spinner.setSelection(2);
-                    break;
-            }
+
+        if(priority == Priority.HIGH) {
+            spinner.setSelection(2);
+        } else if(priority == Priority.MEDIUM) {
+            spinner.setSelection(1);
+        } else {
+            spinner.setSelection(0);
         }
-        if(!TextUtils.isEmpty(date)) {
-            dateTextView.setText(date);
+
+        if(!TextUtils.isEmpty(Utils.getStringFromDate(date))) {
+            dateTextView.setText(Utils.getStringFromDate(date));
         }
         if(!TextUtils.isEmpty(time)) {
             timeTextView.setText(time);
@@ -159,7 +158,8 @@ public class NewItem extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
+        String date = (++monthOfYear)+"/"+dayOfMonth+"/"+year;
+        Log.w("MyApp", "onDateSet: " + date);
         dateTextView.setText(date);
     }
 

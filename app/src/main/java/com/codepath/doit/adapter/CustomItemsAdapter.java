@@ -1,6 +1,7 @@
 package com.codepath.doit.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +15,15 @@ import android.widget.TextView;
 import com.codepath.doit.R;
 import com.codepath.doit.activities.MainActivity;
 import com.codepath.doit.models.Item;
+import com.codepath.doit.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable {
 
-    private ArrayList<Item> original;
-    private ArrayList<Item> fitems;
+    public ArrayList<Item> original;
+    public ArrayList<Item> fitems;
     private Filter filter;
     private Context context;
 
@@ -79,12 +81,14 @@ public class CustomItemsAdapter extends ArrayAdapter<Item> implements Filterable
             cb.setOnCheckedChangeListener((MainActivity) context);
             tvName.setText(item.subject);
             tvPriority.setText(item.priority.getName());
+            tvPriority.setTextColor(item.priority.getColor());
             TextView dueDate = (TextView) v.findViewById(R.id.tvDueDate);
-            if (!TextUtils.isEmpty(item.dueDate)) {
+            if (!TextUtils.isEmpty(Utils.getStringFromDate(item.dueDate))) {
                 dueDate.setVisibility(View.VISIBLE);
-                dueDate.setText(item.dueDate);
-                if (!TextUtils.isEmpty(item.dueTime)) {
-                    dueDate.append(" " + item.dueTime);
+                if(!TextUtils.isEmpty(item.dueTime)) {
+                    dueDate.setText(Utils.getStringFromDateAndTime(item.dueDate));
+                } else {
+                    dueDate.setText(Utils.getStringFromDate(item.dueDate));
                 }
             } else {
                 dueDate.setVisibility(View.GONE);

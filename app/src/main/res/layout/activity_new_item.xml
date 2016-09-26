@@ -1,161 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.NewItem">
 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/task_to_be_done"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/tvNewTask"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".activities.NewItem">
 
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/etNewTask"
-        android:layout_below="@+id/tvNewTask"
-        android:layout_alignParentStart="true"
-        android:textColorHint="#B8BFC2"
-        android:hint="@string/enter_task_here" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task_to_be_done"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/tvNewTask"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
-    <ImageButton
-        android:id="@+id/spkBtnNewTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvNewTask"
-        android:backgroundTint="@android:color/white"
-        android:tint="@color/colorPrimary"
-        android:layout_toEndOf="@id/etNewTask"
-        android:onClick="onSpkBtnClick"
-        android:contentDescription="@string/mic_image"
-        android:src="@android:drawable/ic_btn_speak_now" />
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etNewTask"
+            android:layout_below="@+id/tvNewTask"
+            android:layout_alignParentStart="true"
+            android:textColorHint="#B8BFC2"
+            android:layout_toStartOf="@+id/spkBtnNewTask"
+            android:hint="@string/enter_task_here" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/due_date"
-        android:textSize="15sp"
-        android:id="@+id/tvDate"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/etNewTask"
-        android:layout_alignParentStart="true" />
+        <ImageButton
+            android:id="@+id/spkBtnNewTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNewTask"
+            android:backgroundTint="@android:color/white"
+            android:tint="@color/colorPrimary"
+            android:layout_alignParentEnd="true"
+            android:onClick="onSpkBtnClick"
+            android:contentDescription="@string/mic_image"
+            android:src="@android:drawable/ic_btn_speak_now" />
 
-    <EditText
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/etDisplayDate"
-        android:hint="@string/date_not_set"
-        android:textColorHint="#B8BFC2"
-        android:onClick="onDateSet"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:cursorVisible="false"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:paddingTop="8sp"
-        android:layout_below="@+id/tvDate"
-        android:layout_alignParentStart="true"
-        tools:ignore="TextFields" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/due_date"
+            android:textSize="15sp"
+            android:id="@+id/tvDate"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/etNewTask"
+            android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_event_black_24dp"
-        android:id="@+id/imgDate"
-        android:tint="@color/colorPrimary"
-        android:layout_below="@+id/tvDate"
-        android:layout_toEndOf="@+id/etDisplayDate"
-        android:contentDescription="@string/click_to_set_date" />
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etDisplayDate"
+            android:layout_toStartOf="@+id/imgDate"
+            android:hint="@string/date_not_set"
+            android:textColorHint="#B8BFC2"
+            android:onClick="onDateSet"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingTop="8sp"
+            android:layout_below="@+id/tvDate"
+            android:layout_alignParentStart="true"
+            tools:ignore="TextFields" />
 
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_highlight_off_black_24dp"
-        android:layout_marginStart="10dp"
-        android:tint="@color/colorPrimary"
-        android:id="@+id/imgDateClear"
-        android:layout_below="@+id/tvDate"
-        android:layout_toEndOf="@+id/imgDate"
-        android:onClick="clearDate"
-        android:contentDescription="@string/cancel_date" />
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_event_black_24dp"
+            android:id="@+id/imgDate"
+            android:tint="@color/colorPrimary"
+            android:layout_below="@+id/tvDate"
+            android:layout_toStartOf="@+id/imgDateClear"
+            android:contentDescription="@string/click_to_set_date" />
 
-    <EditText
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/etDisplayTime"
-        android:layout_marginTop="20dp"
-        android:onClick="onTimeSet"
-        android:textColorHint="#B8BFC2"
-        android:hint="@string/time_not_set"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:cursorVisible="false"
-        android:textColor="@android:color/black"
-        android:paddingTop="8sp"
-        android:textSize="20sp"
-        android:layout_below="@+id/etDisplayDate"
-        android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_highlight_off_black_24dp"
+            android:layout_marginStart="10dp"
+            android:tint="@color/colorPrimary"
+            android:id="@+id/imgDateClear"
+            android:layout_below="@+id/tvDate"
+            android:layout_alignParentEnd="true"
+            android:onClick="clearDate"
+            android:contentDescription="@string/cancel_date" />
 
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="20dp"
-        android:tint="@color/colorPrimary"
-        android:src="@drawable/ic_schedule_black_24dp"
-        android:id="@+id/imgTime"
-        android:layout_below="@+id/etDisplayDate"
-        android:layout_toEndOf="@+id/etDisplayTime"
-        android:contentDescription="@string/click_to_set_time" />
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etDisplayTime"
+            android:layout_marginTop="20dp"
+            android:onClick="onTimeSet"
+            android:textColorHint="#B8BFC2"
+            android:hint="@string/time_not_set"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:textColor="@android:color/black"
+            android:paddingTop="8sp"
+            android:textSize="20sp"
+            android:layout_below="@+id/etDisplayDate"
+            android:layout_toStartOf="@+id/imgTime"
+            android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_highlight_off_black_24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
-        android:tint="@color/colorPrimary"
-        android:id="@+id/imgTimeClear"
-        android:layout_below="@+id/etDisplayDate"
-        android:layout_toEndOf="@+id/imgTime"
-        android:onClick="clearTime"
-        android:contentDescription="@string/cancel_time"/>
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="20dp"
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/ic_schedule_black_24dp"
+            android:id="@+id/imgTime"
+            android:layout_below="@+id/etDisplayDate"
+            android:layout_toStartOf="@+id/imgTimeClear"
+            android:contentDescription="@string/click_to_set_time" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/enter_priority"
-        android:textSize="15sp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/tvPriority"
-        android:layout_below="@+id/imgTime"
-        android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_highlight_off_black_24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:tint="@color/colorPrimary"
+            android:id="@+id/imgTimeClear"
+            android:layout_below="@+id/etDisplayDate"
+            android:layout_alignParentEnd="true"
+            android:onClick="clearTime"
+            android:contentDescription="@string/cancel_time"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:layout_below="@+id/tvPriority"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
-        android:prompt="@string/priority_prompt"
-        android:spinnerMode="dropdown" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/enter_priority"
+            android:textSize="15sp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/tvPriority"
+            android:layout_below="@+id/imgTime"
+            android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_below="@+id/tvPriority"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:prompt="@string/priority_prompt"
+            android:spinnerMode="dropdown" />
+
+    </RelativeLayout>
+</ScrollView>

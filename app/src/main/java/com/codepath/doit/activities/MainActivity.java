@@ -35,6 +35,7 @@ import com.codepath.doit.adapter.CustomItemsAdapter;
 import com.codepath.doit.models.Item;
 import com.codepath.doit.models.Priority;
 import com.codepath.doit.utils.DBUtils;
+import com.codepath.doit.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -194,11 +195,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         String shareBody = "";
         for(int i = 0; i < items.size(); i++) {
             shareBody += i+1 + ". " + items.get(i).subject;
-            if(!TextUtils.isEmpty(items.get(i).dueDate)) {
-                shareBody += " by " + items.get(i).dueDate;
-                if(!TextUtils.isEmpty(items.get(i).dueTime)) {
-                    shareBody += " " + items.get(i).dueTime;
-                }
+            if(!TextUtils.isEmpty(Utils.getStringFromDate(items.get(i).dueDate))) {
+                shareBody += " by " + Utils.getStringFromDate(items.get(i).dueDate);
             }
             shareBody += "\n";
         }
@@ -225,15 +223,29 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
                 newItem = new Item();
             }
             newItem.subject = data.getExtras().getString("subject");
-            newItem.dueDate = data.getExtras().getString("date");
-            newItem.dueTime = data.getExtras().getString("time");
+            String strDate = data.getExtras().getString("date");
+            String strTime = data.getExtras().getString("time");
+
+            if(!TextUtils.isEmpty(strDate) && TextUtils.isEmpty(strTime)) {
+                newItem.dueDate = Utils.getDateFromString(strDate);
+            } else if(!TextUtils.isEmpty(strDate)){
+                newItem.dueDate = Utils.getDateAndTimeFromString(strDate + " " + strTime);
+            }
+            if(TextUtils.isEmpty(strDate)) {
+                newItem.dueDate = null;
+            }
+            if(TextUtils.isEmpty(strTime)) {
+                newItem.dueTime = null;
+            }
+            newItem.dueTime = strTime;
             newItem.priority = (Priority) data.getSerializableExtra("Priority");
             if(position == -1) {
                 Log.w("MyApp", "position 0");
                 aToDoAdaptor.add(newItem);
                 items.add(newItem);
             }
-            Collections.sort(items);
+            Collections.sort(aToDoAdaptor.original);
+            Collections.sort(aToDoAdaptor.fitems);
             aToDoAdaptor.notifyDataSetChanged();
             DBUtils.writeOne(newItem);
         }

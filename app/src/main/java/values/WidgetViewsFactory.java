@@ -10,6 +10,7 @@ import android.widget.RemoteViewsService;
 import com.codepath.doit.R;
 import com.codepath.doit.models.Item;
 import com.codepath.doit.utils.DBUtils;
+import com.codepath.doit.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,9 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
         row.setTextViewText(R.id.textSubject, items.get(position).subject);
 
-        if(!TextUtils.isEmpty(items.get(position).dueDate)) {
+        if(!TextUtils.isEmpty(Utils.getStringFromDate(items.get(position).dueDate))) {
             row.setViewVisibility(R.id.textDueDate, View.VISIBLE);
-            row.setTextViewText(R.id.textDueDate, items.get(position).dueDate);
+            row.setTextViewText(R.id.textDueDate, Utils.getStringFromDate(items.get(position).dueDate));
         } else {
             row.setViewVisibility(R.id.textDueDate, View.GONE);
         }
