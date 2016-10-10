@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">ಕಾರ್ಯ</string>
+    <string name="add_button">Add</string>
+    <string name="save_button">Save</string>
+    <string name="priority_prompt">Priority</string>
+    <string name="share_menu">ಹಂಚು</string>
+    <string name="edit_item_text"> Edit Item Below</string>
+    <string name="search_hint">ಹುಡುಕಿ</string>
+    <string name="quick_add_hint">ಬೇಗನೆ ಕಾರ್ಯವನ್ನು ನಿರೂಪಿಸಿ</string>
+    <string name="mic_image">Talk to add task</string>
+    <string name="click_image">Click to add task</string>
+    <string name="low">ಕಡಿಮೆ</string>
+    <string name="medium">ಮಧ್ಯಮ</string>
+    <string name="high">ಹೆಚ್ಚು</string>
+    <string-array name="priority_array">
+        <item>ಕಡಿಮೆ</item>
+        <item>ಮಧ್ಯಮ</item>
+        <item>ಹೆಚ್ಚು</item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="task_to_be_done">ಮಾಡಬೇಕಾದ ಕೆಲಸ</string>
+    <string name="enter_task_here">ಇಲ್ಲಿ ಕಾರ್ಯ ನಮೂದಿಸಿ</string>
+    <string name="due_date">ಮುಗಿಸುವ ದಿನಾಂಕ</string>
+    <string name="date_not_set">ದಿನಾಂಕ ನೀಡಿಲ್ಲ </string>
+    <string name="time_not_set">ಸಮಯ ನೀಡಿಲ್ಲ</string>
+    <string name="enter_priority">ಆದ್ಯತೆ</string>
+    <string name="click_to_set_date">Click to set date</string>
+    <string name="click_to_set_time">Click to set time</string>
+    <string name="cancel_date">cancel date</string>
+    <string name="cancel_time">cancel time</string>
+    <string name="search_task">ಹುಡುಕಿ</string>
+    <string name="save_item">Save</string>
+    <string name="share_item">ಹಂಚು</string>
+    <string name="delete_items">delete items</string>
+    <string name="language_setting">ಭಾಷೆ ಬದಲಿಸಿ</string>
+    <string-array name="lang_select">
+        <item>English</item>
+        <item>हिन्दी</item>
+        <item>ಕನ್ನಡ</item>
+    </string-array>
+</resources>

@@ -2,20 +2,27 @@ package com.codepath.doit.activities;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +33,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -39,6 +47,7 @@ import com.codepath.doit.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import values.WidgetProvider;
 
@@ -53,10 +62,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
     FloatingActionButton fab;
     MenuItem deleteItems;
     MenuItem searchItem;
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+
+        String lang = settings.getString("LANG", "");
+        if (! "".equals(lang) && ! config.locale.getLanguage().equals(lang)) {
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+
+        Log.w("MyApp", "onCreate: " + lang);
+
         super.onCreate(savedInstanceState);
+        mContext = this;
+
         setContentView(R.layout.activity_main);
         populateItems();
         listView = (ListView) findViewById(R.id.lvDisplay);
@@ -186,8 +211,67 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        return (id == R.id.action_settings) || super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_change_language:
+                showChangeLangDialog();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+
+    public void showChangeLangDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.language_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final Spinner spinner1 = (Spinner) dialogView.findViewById(R.id.spinner1);
+
+        dialogBuilder.setTitle("Set language");
+        dialogBuilder.setMessage("Set language");
+        dialogBuilder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                int langpos = spinner1.getSelectedItemPosition();
+                switch(langpos) {
+                    case 0: //English
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
+                        setLangRecreate("en");
+                        return;
+                    case 1: //Hindi
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "hi").commit();
+                        setLangRecreate("hi");
+                        return;
+                    case 2: //Kannada
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "kn").commit();
+                        setLangRecreate("kn");
+                        return;
+                    default: //By default set to english
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
+                        setLangRecreate("en");
+                        return;
+                }
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    public void setLangRecreate(String langval) {
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(langval);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        recreate();
+    }
+
 
     public void onShareClick(MenuItem view) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -340,4 +424,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
         AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(widgetIDs, R.id.to_do_widget);
     }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
 }

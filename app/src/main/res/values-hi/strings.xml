@@ -32,7 +32,6 @@
     <string name="search_task">Search task</string>
     <string name="save_item">Save</string>
     <string name="share_item">Share</string>
-    <string name="language_setting">Change language</string>
     <string name="delete_items">delete items</string>
     <string-array name="lang_select">
         <item>English</item>

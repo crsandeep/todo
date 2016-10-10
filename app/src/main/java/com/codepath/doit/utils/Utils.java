@@ -1,7 +1,5 @@
 package com.codepath.doit.utils;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,7 +41,6 @@ public class Utils {
             strDate += "/";
             strDate += calendar.get(Calendar.YEAR);
         }
-        Log.w("MyApp", "getStringFromDate: " + strDate );
         return strDate;
     }
 
@@ -66,7 +63,6 @@ public class Utils {
 
             strDate += curTime;
         }
-        Log.w("MyApp", "getStringFromDate: " + strDate );
         return strDate;
     }
 }
